@@ -37,6 +37,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   concentric_transition: ^1.0.3
+  truecaller_sdk: ^0.1.2
   cache_manager: ^1.0.0+4
   provider: ^6.0.4
   animated_splash_screen: ^1.1.0
@@ -49,11 +50,14 @@ dependencies:
   google_fonts: ^3.0.1
   permission_handler: ^10.2.0
   flutter_otp_text_field: ^1.1.1
+  flutter_facebook_auth: ^5.0.7
+  google_sign_in: ^5.4.2
   call_log: ^4.0.0
   workmanager: ^0.5.1
   intl: ^0.17.0
   contacts_service: ^0.6.3
   flutter_contacts: ^1.1.5+1
+  
 
 dev_dependencies:
   flutter_test:
