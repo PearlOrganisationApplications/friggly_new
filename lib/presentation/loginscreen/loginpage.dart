@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:friggly/app/constants/appcolors.dart';
 import 'package:friggly/contacts/contact.dart';
+import 'package:friggly/core/notifire/authantication.dart';
 import 'package:friggly/presentation/loginscreen/otpverify.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -13,6 +16,28 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  bool islogin = false;
+  Map userobj = {};
+  GoogleSignIn googleSignIn = GoogleSignIn();
+
+  googleSignin() async {
+    GoogleSignIn _googleSignIn = GoogleSignIn();
+    try {
+      var result = await _googleSignIn.signIn();
+      print(result);
+      if (result != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ContactList(),
+          ),
+        );
+      }
+    } catch (error) {
+      print(error);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,10 +137,25 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ContactList()));
+                            FacebookAuth.instance.login(permissions: [
+                              "public_profile",
+                              "email"
+                            ]).then((value) {
+                              FacebookAuth.instance
+                                  .getUserData()
+                                  .then((userData) async {
+                                setState(() {
+                                  islogin = true;
+                                  userobj = userData;
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ContactList(),
+                                    ),
+                                  );
+                                });
+                              });
+                            });
                           },
                           child: Container(
                             height: 45,
@@ -160,7 +200,9 @@ class _LoginPageState extends State<LoginPage> {
                           height: 40.0,
                         ),
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            googleSignin();
+                          },
                           child: Container(
                             height: 45,
                             width: MediaQuery.of(context).size.width * 0.85,
